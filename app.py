@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, session, redirect
 from functools import wraps
 from dbUtils import getList
-
+#edit by user B
 # creates a Flask application, specify a static folder on /
 app = Flask(__name__, static_folder='static',static_url_path='/')
 #set a secret key to hash cookies
