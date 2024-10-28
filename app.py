@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect
 from functools import wraps
-from dbUtils import getList
+import dbUtils as db
 #edit by user A
 #edit by user B
 # creates a Flask application, specify a static folder on /
@@ -25,12 +25,19 @@ def isLogin():
 
 @app.route("/")
 #check login with decorator function
-@login_required
+#@login_required
 def hello(): 
-	message = "Hello, World 1"
-	return message
+	#message = "Hello, World 1"
+	dat=db.getList()
+	#print(dat)
+	return	render_template('todolist.html', data=dat)
 
-
+@app.route("/delete/<int:id>")
+#check login with decorator function
+#@login_required
+def deljob(id): 
+    db.delete(id)
+    return redirect("/")
 
 @app.route("/test/<string:name>/<int:id>")
 #取得網址作為參數
