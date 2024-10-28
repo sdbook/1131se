@@ -1,3 +1,3 @@
 pip install mysql-connector
-pip install Flask
+pip install Flasks
 rem this is a test
