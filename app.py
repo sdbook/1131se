@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request, session, redirect
 from functools import wraps
-import dbUtils as db
-#edit by user A
-#edit by user B
+from dbUtils import getList
+
 # creates a Flask application, specify a static folder on /
 app = Flask(__name__, static_folder='static',static_url_path='/')
 #set a secret key to hash cookies
@@ -12,8 +11,8 @@ app.config['SECRET_KEY'] = '123TyU%^&'
 def login_required(f):
 	@wraps(f)
 	def wrapper(*args, **kwargs):
-		myRole = session.get('loginRole')
-		if not myRole:
+		loginID = session.get('loginID')
+		if not loginID:
 			return redirect('/loginPage.html')
 		return f(*args, **kwargs)
 	return wrapper
@@ -27,22 +26,15 @@ def isLogin():
 #check login with decorator function
 @login_required
 def hello(): 
-	#message = "Hello, World 1"
-	dat={
-		"data":db.getList(),
-		"user": session['loginName'],
-		"role": session['loginRole']
-	}
-	
-	#print(dat)
-	return	render_template('todolist.html', data=dat)
+	message = "Hello, World 1"
+	return message
 
-@app.route("/delete/<int:id>")
-#check login with decorator function
-@login_required
-def deljob(id): 
-	db.delete(id)
-	return redirect("/")
+@app.route("/getAjaxData", methods=['POST'])
+#取得網址作為參數
+def getdata111():
+    id=request.form['userID']
+    name=request.form['userName']
+    return f"I got your input: {id}, {name}"
 
 @app.route("/test/<string:name>/<int:id>")
 #取得網址作為參數
@@ -51,6 +43,11 @@ def useParam(name,id):
 	if not isLogin():
 		return redirect('/loginPage.html')
 	return f"got name={name}, id={id} "
+
+@app.route("/secret")
+#使用server side render: template 樣板
+def showSecret():
+    return "<img src='/dog.jpg' />";
 
 @app.route("/edit")
 #使用server side render: template 樣板
@@ -111,14 +108,9 @@ def login():
 	id = form['ID']
 	pwd =form['PWD']
 	#validate id/pwd
-	userInfo=db.checkLogin(id,pwd)
-	if userInfo:
-		session['loginID']=userInfo['id']
-		session['loginRole']=userInfo['role']
-		session['loginName']=userInfo['name']
+	if id=='123' and pwd=='456':
+		session['loginID']=id
 		return redirect("/")
 	else:
-		session['loginID']=''
-		session['loginRole']=0
-		session['loginName']=''		   
+		session['loginID']=False
 		return redirect("/loginForm")
