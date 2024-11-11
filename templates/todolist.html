@@ -4,6 +4,7 @@
 <body>
 <p>清單</p>
 <hr />
+{{ data.name }} 你好，米的等級是: {{ data.role }}
 <table width="200" border="1">
   <tr>
     <td>id</td>
@@ -11,12 +12,16 @@
 	<td>Job Content</td>
 </td></td>
   </tr>
-    {% for rec in data %}
+    {% for rec in data.data %}
 	<tr>
 		<td>{{rec.id}}</td>
 		<td>{{rec.jobName}}</td>
 		<td>{{rec.jobContent}}</td>
-	<td><a href="/delete/{{rec.id}}">刪</a></td>
+	<td>
+	{% if data.role %}
+	<a href="/delete/{{rec.id}}">刪</a>
+	{% endif %}
+	</td>
 	</tr>
     {% endfor %}
 </table>

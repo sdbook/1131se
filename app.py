@@ -12,8 +12,8 @@ app.config['SECRET_KEY'] = '123TyU%^&'
 def login_required(f):
 	@wraps(f)
 	def wrapper(*args, **kwargs):
-		loginID = session.get('loginID')
-		if not loginID:
+		myRole = session.get('loginRole')
+		if not myRole:
 			return redirect('/loginPage.html')
 		return f(*args, **kwargs)
 	return wrapper
@@ -25,19 +25,24 @@ def isLogin():
 
 @app.route("/")
 #check login with decorator function
-#@login_required
+@login_required
 def hello(): 
 	#message = "Hello, World 1"
-	dat=db.getList()
+	dat={
+		"data":db.getList(),
+		"user": session['loginName'],
+		"role": session['loginRole']
+	}
+	
 	#print(dat)
 	return	render_template('todolist.html', data=dat)
 
 @app.route("/delete/<int:id>")
 #check login with decorator function
-#@login_required
+@login_required
 def deljob(id): 
-    db.delete(id)
-    return redirect("/")
+	db.delete(id)
+	return redirect("/")
 
 @app.route("/test/<string:name>/<int:id>")
 #取得網址作為參數
@@ -106,9 +111,14 @@ def login():
 	id = form['ID']
 	pwd =form['PWD']
 	#validate id/pwd
-	if id=='123' and pwd=='456':
-		session['loginID']=id
+	userInfo=db.checkLogin(id,pwd)
+	if userInfo:
+		session['loginID']=userInfo['id']
+		session['loginRole']=userInfo['role']
+		session['loginName']=userInfo['name']
 		return redirect("/")
 	else:
-		session['loginID']=False
+		session['loginID']=''
+		session['loginRole']=0
+		session['loginName']=''		   
 		return redirect("/loginForm")

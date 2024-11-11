@@ -44,3 +44,11 @@ def getList():
 	#param=('值',...)
 	cursor.execute(sql)
 	return cursor.fetchall()
+
+def checkLogin(id,pwd):
+	sql="select role, id,name from user where id=%s and pwd=%s;"
+	cursor.execute(sql,(id,pwd))
+	rs=cursor.fetchone()
+	return rs
+	
+	
