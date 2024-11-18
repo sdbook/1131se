@@ -40,7 +40,13 @@ def update(id,data):
 	return
 	
 def getList():
-	sql="select 欄位,... from 表格 where 條件;"
+	sql="select * from todo;"
 	#param=('值',...)
-	cursor.execute(sql,param)
+	cursor.execute(sql)
 	return cursor.fetchall()
+
+def getJob(id):
+	sql="select * from todo where id=%s;"
+	#param=('值',...)
+	cursor.execute(sql,(id,))
+	return cursor.fetchone()

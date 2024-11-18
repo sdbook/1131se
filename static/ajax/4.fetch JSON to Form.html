@@ -4,7 +4,7 @@
 
 function loadData() {
 	id = document.getElementById('todoID').value;
-	URL='d.py?id=' + id; //use GET to send id
+	URL='/getTodoJob?id=' + id; //use GET to send id
 	//向URL發出request
 	fetch(URL,{
 		method: 'GET'
@@ -14,7 +14,7 @@ function loadData() {
 		return res.json();
 	})
 	.then(function(json){ //下一個callback function，參數data是上一個callback傳進來的物件
-		document.getElementById('jobID').value = json['jobID'];
+		document.getElementById('jobID').value = json['id'];
 		document.getElementById('jobName').value = json['jobName'];
 		document.getElementById('jobUrgent').value = json['jobUrgent'];
 		document.getElementById('jobContent').value = json['jobContent'];

@@ -3,17 +3,18 @@
 <script language="javascript">
 
 function loadData() {
-	URL='c.php';
+	URL='/getListJSON';
 	//向URL發出request
 	fetch(URL,{
 		method: 'POST', // or 'GET'
 	})
 	.then(function(res){ //fetch的callback function，傳回值是promise物件: res
 		//將res的內容轉為JSON物件，傳給下一個Callback function
+		//return res.text();
 		return res.json();
 	})
 	.then(function(json){ //下一個callback function，參數data是上一個callback傳進來的物件
-		
+		console.log(json)
 		//將傳進來的資料放進div中
 		let data= "";
 		for (let record of json) {
